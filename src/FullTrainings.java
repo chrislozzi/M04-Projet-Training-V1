@@ -29,7 +29,7 @@ public class FullTrainings {
 	 * Flux d'E/S
 	 * @since 2.0
 	 */
-	private static Scanner scan = new Scanner(System.in);
+	private static Scanner scan = new Scanner(System.in);//ouverture du flux 
 
 	/** Liste des formations : id + data */
 	protected static Map<Integer, ArrayList<String>> trainings = new HashMap<>();
@@ -48,9 +48,9 @@ public class FullTrainings {
 	 */
 	public static void main(String[] args) {
 
-		insertTraining();
-		displayTrainings();
-		scan.close();
+		insertTraining(); //initialise la liste des formation		
+		displayTrainings();//affiche la liste des formation
+		scan.close();//fermeture du flux 
 	}
 
 	/**
@@ -70,9 +70,7 @@ public class FullTrainings {
 		System.out.println("-------------------------------------------------------------------------|");
 		System.out.println("1 : Commande de formation / 2 : Consulter votre panier  / 3 : Quitter    |");
 		System.out.println("--------------------------------------------------------------------------\n");
-		while (scan.hasNext() == false)
-			scan.next();
-		choice = scan.nextInt();
+		choice = getInfo(scan);
 		switch(choice){
 		case 1 : displayBuyTrainings();
 		break;
@@ -81,7 +79,8 @@ public class FullTrainings {
 		case 3 :System.out.println("Au revoir et merci de votre visite");
 		break;
 		default:
-			System.out.println("Choix incorrect");
+			displayWrongInput();
+			displayTrainings();
 			break;
 		}
 	}
@@ -123,15 +122,24 @@ public class FullTrainings {
 			System.out.println("                                                                                    |");	
 			System.out.println("                        Vous n'avez commandé aucune formation                       |");
 			System.out.println("                                                                                    |");
+			System.out.println("------------------------------------------------------------------------------------|");
+			System.out.println("1 : Retour à la liste des formations                                                |");
+			System.out.println("------------------------------------------------------------------------------------|");
 		}
 
 		System.out.println("------------------------------------------------------------------------------------|");
-		System.out.println("1 : Retour à la liste des formations                                                |");
-		System.out.println("------------------------------------------------------------------------------------\n");
-
-		choice = scan.nextInt();
-		if (choice == 1)
-			displayTrainings();
+		System.out.println("1 : Retour à la liste des formations  /  2 : Modifier votre panier                  |");
+		System.out.println("------------------------------------------------------------------------------------|");
+		choice = getInfo(scan);
+		if(choice > 2)displayWrongInput();
+		if (choice == 1) displayTrainings();
+		if (choice == 2)removeTraining(scan);
+	}
+	
+	private static void displayWrongInput() {
+		System.out.println("-------------------------------------------------------------------------|");
+		System.out.println("                C H O I X       I N C C O R E C T E                      |");
+		System.out.println("-------------------------------------------------------------------------|\n");
 	}
 
 	/**
@@ -141,8 +149,8 @@ public class FullTrainings {
 		Integer choiceId;
 		int intQuantityTraining;
 		String stringQuantityTraining;
-		choiceId =  scan.nextInt();
-		
+		choiceId = getInfo(scan);
+		if(choiceId > trainings.size())displayWrongInput();
 		//initialisation d'un panier vide avec la première formation commandée
 		if(caddy.isEmpty()) {			
 			caddy.put(choiceId, new ArrayList<String>());
@@ -151,24 +159,65 @@ public class FullTrainings {
 			caddy.get(choiceId).add("1");
 		}else{
 			if(!caddy.containsKey(choiceId)) {	
-			
+
 				//ajoute une formation au panier, quantité 1
 				caddy.put(choiceId, new ArrayList<String>());
 				caddy.get(choiceId).add(trainings.get(choiceId).get(0));caddy.get(choiceId).add(trainings.get(choiceId).get(1));
 				caddy.get(choiceId).add(trainings.get(choiceId).get(2));caddy.get(choiceId).add(trainings.get(choiceId).get(3));
 				caddy.get(choiceId).add("1");
 			}else {
-				
+
 				//incrémente de 1 une formation déjà présente dans le panier
 				stringQuantityTraining = caddy.get(choiceId).get(4);
 				caddy.get(choiceId).remove(4);
-				
+
 				//conversion string to int pour incrémenté la quantité
 				intQuantityTraining = 1 +Integer.parseInt(stringQuantityTraining); 
 				//conversion int to string et ajout au caddy
 				caddy.get(choiceId).add(String.valueOf(intQuantityTraining));					
 
 			}
+		}
+
+	}
+	
+	private static int getInfo(Scanner scan) {
+		while(scan.hasNextInt() == false) 
+			scan.next();
+		return scan.nextInt();
+		
+	}
+
+	/**
+	 * Méthode de suppression de formation dans le panier
+	 * @param input des id de formation commandées*/
+	private static void removeTraining(Scanner scan) {
+		Integer choiceId;
+		int intQuantityTraining;
+		String stringQuantityTraining;
+		choiceId = getInfo(scan);
+
+		//initialisation d'un panier vide avec la première formation commandée
+
+		if(!caddy.containsKey(choiceId)) {	
+
+			//ajoute une formation au panier, quantité 1
+			caddy.put(choiceId, new ArrayList<String>());
+			caddy.get(choiceId).add(trainings.get(choiceId).get(0));caddy.get(choiceId).add(trainings.get(choiceId).get(1));
+			caddy.get(choiceId).add(trainings.get(choiceId).get(2));caddy.get(choiceId).add(trainings.get(choiceId).get(3));
+			caddy.get(choiceId).add("1");
+		}else {
+
+			//incrémente de 1 une formation déjà présente dans le panier
+			stringQuantityTraining = caddy.get(choiceId).get(4);
+			caddy.get(choiceId).remove(4);
+
+			//conversion string to int pour incrémenté la quantité
+			intQuantityTraining = 1 +Integer.parseInt(stringQuantityTraining); 
+			//conversion int to string et ajout au caddy
+			caddy.get(choiceId).add(String.valueOf(intQuantityTraining));					
+
+
 		}
 
 	}
