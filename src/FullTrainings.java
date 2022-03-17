@@ -117,6 +117,9 @@ public class FullTrainings {
 
 				System.out.format("%-16s| %-9s| %-38s| %-5s|   %-6s|",value.get(0), value.get(1),value.get(2), value.get(3), value.get(4));
 				System.out.println();
+				System.out.println("------------------------------------------------------------------------------------|");
+				System.out.println("1 : Retour à la liste des formations  /  2 : Modifier votre panier                  |");
+				System.out.println("------------------------------------------------------------------------------------|");
 			});
 		}else {
 			System.out.println("                                                                                    |");	
@@ -127,15 +130,15 @@ public class FullTrainings {
 			System.out.println("------------------------------------------------------------------------------------|");
 		}
 
-		System.out.println("------------------------------------------------------------------------------------|");
-		System.out.println("1 : Retour à la liste des formations  /  2 : Modifier votre panier                  |");
-		System.out.println("------------------------------------------------------------------------------------|");
+		
 		choice = getInfo(scan);
-		if(choice > 2)displayWrongInput();
+		if(choice > 2) {
+			displayWrongInput();
+			displayTrainings();}
 		if (choice == 1) displayTrainings();
 		if (choice == 2)removeTraining(scan);
 	}
-	
+	//affichage en cas d'erreur de saisi
 	private static void displayWrongInput() {
 		System.out.println("-------------------------------------------------------------------------|");
 		System.out.println("                C H O I X       I N C C O R E C T E                      |");
@@ -150,7 +153,9 @@ public class FullTrainings {
 		int intQuantityTraining;
 		String stringQuantityTraining;
 		choiceId = getInfo(scan);
-		if(choiceId > trainings.size())displayWrongInput();
+		if(choiceId > trainings.size()) {
+			displayWrongInput();
+			displayCaddy();}
 		//initialisation d'un panier vide avec la première formation commandée
 		if(caddy.isEmpty()) {			
 			caddy.put(choiceId, new ArrayList<String>());
@@ -180,7 +185,7 @@ public class FullTrainings {
 		}
 
 	}
-	
+	//gestion des erreur de saisies, string a la place d'un integer
 	private static int getInfo(Scanner scan) {
 		while(scan.hasNextInt() == false) 
 			scan.next();
