@@ -13,22 +13,20 @@ public class FullTrainings {
 	 * @author Lozzi - 2022
 	 * @since 1.0
 	 */
-	/** Liste des noms de formations */
-	public static final String[] trainingName = { "Java", "Java avancé", "Spring", "Php frameworks", "C#"};
 
-	/** Liste des durées des formations en nombre de jours */
-	public static final String[] trainingDuration = { "20", "15", "0"};
 
-	/** Liste des description des formation */
-	public static final String[] trainingContent = { "Java SE 8 : Syntaxe & Poo",
-			"Exceptions, fichiers, Jdbc, thread...", "Spring Core/Mvc/Security", "Symphony", "DotNet Core"};
+	/** Méthode qui initialise la liste des formations */
+	private static final void insertTraining() {
 
-	/** Liste des prix des formations */
-	public static final String[] trainingPrice = { "3000", "5000", "2500"};
+		trainings.put(1, new ArrayList<String>());trainings.get(1).add("Java");trainings.get(1).add("20");trainings.get(1).add("Java SE 8 : Syntaxe & Poo");trainings.get(1).add("3000");
+		trainings.put(2, new ArrayList<String>());trainings.get(2).add("Java avancé");trainings.get(2).add("20");	trainings.get(2).add("Exceptions, fichiers, Jdbc, thread...");trainings.get(2).add("5000");		
+		trainings.put(3, new ArrayList<String>());trainings.get(3).add("Spring");trainings.get(3).add("20");trainings.get(3).add("Spring Core/Mvc/Security");trainings.get(3).add("5000");
+		trainings.put(4, new ArrayList<String>());trainings.get(4).add("Php frameworks");trainings.get(4).add("15");trainings.get(4).add("Symphony");trainings.get(4).add("2500");		
+		trainings.put(5, new ArrayList<String>());trainings.get(5).add("C#");trainings.get(5).add("20");trainings.get(5).add("DotNet Core");trainings.get(5).add("5000");
+	}
 
 	/**
 	 * Flux d'E/S
-	 * 
 	 * @since 2.0
 	 */
 	private static Scanner scan = new Scanner(System.in);
@@ -38,7 +36,6 @@ public class FullTrainings {
 
 	/**
 	 * Contenue du panier(commande en cours)
-	 * 
 	 * @since 2.0
 	 */
 	protected static Map<Integer, ArrayList<String>> caddy = new HashMap<>();
@@ -67,8 +64,7 @@ public class FullTrainings {
 		System.out.println("COURS          | NB/JOURS | DESCRIPTION                           | PRIX |");
 		System.out.println("---------------|----------|---------------------------------------|------|");
 		trainings.forEach((key, value) -> {
-			System.out.format("%-15s| %-9s| %-38s| %-5s|",value.get(0), value.get(1), value.get(2),
-					value.get(3));
+			System.out.format("%-15s| %-9s| %-38s| %-5s|",value.get(0), value.get(1), value.get(2),	value.get(3));
 			System.out.println();
 		});
 		System.out.println("-------------------------------------------------------------------------|");
@@ -79,13 +75,13 @@ public class FullTrainings {
 		choice = scan.nextInt();
 		switch(choice){
 		case 1 : displayBuyTrainings();
-			break;
+		break;
 		case 2 : displayCaddy();
-			break;
+		break;
 		case 3 :System.out.println("Au revoir et merci de votre visite");
-			break;
+		break;
 		default:
-				System.out.println("Choix incorrect");
+			System.out.println("Choix incorrect");
 			break;
 		}
 	}
@@ -99,7 +95,7 @@ public class FullTrainings {
 		trainings.forEach((key, value) -> {
 			System.out.format("%-3s|%-15s| %-9s| %-38s| %-5s|",key,value.get(0), value.get(1), value.get(2), value.get(3));
 			System.out.println();
-			});
+		});
 		System.out.println("-----------------------------------------------------------------------------|");
 		System.out.println("Saisissez l'id de la formation souhaitez et tapez entrer                     |");
 		System.out.println("-----------------------------------------------------------------------------|\n");
@@ -114,14 +110,21 @@ public class FullTrainings {
 		System.out.println("-------------------------------------------------------------------------------------");
 		System.out.println("                                   MON PANIER                                       |");
 		System.out.println("------------------------------------------------------------------------------------|");
-		System.out.println("COURS           | NB/JOURS | DESCRIPTION                           | PRIX | Quantité|");
-		System.out.println("----------------|----------|---------------------------------------|------|---------|");
-		if (!caddy.isEmpty())
+
+		if (!caddy.isEmpty()) {
+			System.out.println("COURS           | NB/JOURS | DESCRIPTION                           | PRIX | Quantité|");
+			System.out.println("----------------|----------|---------------------------------------|------|---------|");
 			caddy.forEach((key, value) -> {
 
-					System.out.format("%-16s| %-9s| %-38s| %-5s|   %-6s|",value.get(0), value.get(1),value.get(2), value.get(3), value.get(4));
-					System.out.println();
+				System.out.format("%-16s| %-9s| %-38s| %-5s|   %-6s|",value.get(0), value.get(1),value.get(2), value.get(3), value.get(4));
+				System.out.println();
 			});
+		}else {
+			System.out.println("                                                                                    |");	
+			System.out.println("                        Vous n'avez commandé aucune formation                       |");
+			System.out.println("                                                                                    |");
+		}
+
 		System.out.println("------------------------------------------------------------------------------------|");
 		System.out.println("1 : Retour à la liste des formations                                                |");
 		System.out.println("------------------------------------------------------------------------------------\n");
@@ -134,63 +137,45 @@ public class FullTrainings {
 	/**
 	 * Méthode d'ajout de formation dans le panier
 	 * @param input des id de formation commandées*/
-	 private static void addTraining(Scanner scan) {
-		 Integer choiceId;
-		 choiceId =  scan.nextInt();
-		 if(caddy.isEmpty()) {	
+	private static void addTraining(Scanner scan) {
+		Integer choiceId;
+		int intQuantityTraining;
+		String stringQuantityTraining;
+		choiceId =  scan.nextInt();
+		
+		//initialisation d'un panier vide avec la première formation commandée
+		if(caddy.isEmpty()) {			
+			caddy.put(choiceId, new ArrayList<String>());
+			caddy.get(choiceId).add(trainings.get(choiceId).get(0));caddy.get(choiceId).add(trainings.get(choiceId).get(1));
+			caddy.get(choiceId).add(trainings.get(choiceId).get(2));caddy.get(choiceId).add(trainings.get(choiceId).get(3));
+			caddy.get(choiceId).add("1");
+		}else{
+			if(!caddy.containsKey(choiceId)) {	
+			
+				//ajoute une formation au panier, quantité 1
 				caddy.put(choiceId, new ArrayList<String>());
-				caddy.get(choiceId).add(trainings.get(choiceId).get(0));
-				caddy.get(choiceId).add(trainings.get(choiceId).get(1));
-				caddy.get(choiceId).add(trainings.get(choiceId).get(2));
-				caddy.get(choiceId).add(trainings.get(choiceId).get(3));
+				caddy.get(choiceId).add(trainings.get(choiceId).get(0));caddy.get(choiceId).add(trainings.get(choiceId).get(1));
+				caddy.get(choiceId).add(trainings.get(choiceId).get(2));caddy.get(choiceId).add(trainings.get(choiceId).get(3));
 				caddy.get(choiceId).add("1");
-		 }else{
-			 if(!caddy.containsKey(choiceId)) {
-				 caddy.put(choiceId, new ArrayList<String>());
-					caddy.get(choiceId).add("1");
-			 }
-		 }
-		
-	 }
-	
-	/**Méthode qui initialise le panier*/
-	private static void insertPanier() {
-		
-	}
-												 
+			}else {
+				
+				//incrémente de 1 une formation déjà présente dans le panier
+				stringQuantityTraining = caddy.get(choiceId).get(4);
+				caddy.get(choiceId).remove(4);
+				
+				//conversion string to int pour incrémenté la quantité
+				intQuantityTraining = 1 +Integer.parseInt(stringQuantityTraining); 
+				//conversion int to string et ajout au caddy
+				caddy.get(choiceId).add(String.valueOf(intQuantityTraining));					
 
-	/** Méthode qui initialise la liste des formations */
-	private static void insertTraining() {
-
-		trainings.put(1, new ArrayList<String>());
-		trainings.get(1).add(trainingName[0]);
-		trainings.get(1).add(trainingDuration[0]);
-		trainings.get(1).add(trainingContent[0]);
-		trainings.get(1).add(trainingPrice[0]);
-
-		trainings.put(2, new ArrayList<String>());
-		trainings.get(2).add(trainingName[1]);
-		trainings.get(2).add(trainingDuration[0]);
-		trainings.get(2).add(trainingContent[1]);
-		trainings.get(2).add(trainingPrice[1]);
-
-		trainings.put(3, new ArrayList<String>());
-		trainings.get(3).add(trainingName[2]);
-		trainings.get(3).add(trainingDuration[0]);
-		trainings.get(3).add(trainingContent[2]);
-		trainings.get(3).add(trainingPrice[1]);
-
-		trainings.put(4, new ArrayList<String>());
-		trainings.get(4).add(trainingName[3]);
-		trainings.get(4).add(trainingDuration[1]);
-		trainings.get(4).add(trainingContent[3]);
-		trainings.get(4).add(trainingPrice[2]);
-
-		trainings.put(5, new ArrayList<String>());
-		trainings.get(5).add(trainingName[4]);
-		trainings.get(5).add(trainingDuration[0]);
-		trainings.get(5).add(trainingContent[4]);
-		trainings.get(5).add(trainingPrice[1]);
+			}
+		}
 
 	}
+
+
 }
+
+
+
+
