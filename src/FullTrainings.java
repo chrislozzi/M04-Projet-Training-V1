@@ -87,12 +87,13 @@ public class FullTrainings {
 
 	/** méthode qui affiche le menu d'achat de formation */
 	public static void displayBuyTrainings() {
-		int choiceTraining;
-		int quantityTraining;
+		int choice, choiceTraining, quantityTraining;
+		
 		System.out.println("                    Commandez les formations de votre choix                   ");
 		System.out.println("------------------------------------------------------------------------------");
 		System.out.println("ID |COURS          | NB/JOURS | DESCRIPTION                           | PRIX |");
 		System.out.println("---|---------------|----------|---------------------------------------|----- |");
+		
 		trainings.forEach((key, value) -> {
 			System.out.format("%-3s|%-15s| %-9s| %-38s| %-5s|",key,value.get(0), value.get(1), value.get(2), value.get(3));
 			System.out.println();
@@ -122,8 +123,8 @@ public class FullTrainings {
 		if (!caddy.isEmpty()) {
 			System.out.println("ID |COURS           | NB/JOURS | DESCRIPTION                           | PRIX | Quantité|");
 			System.out.println("---|----------------|----------|---------------------------------------|------|---------|");
+			
 			caddy.forEach((key, value) -> {
-
 				System.out.format("%-3s|%-16s| %-9s| %-38s| %-5s|   %-6s|",key, value.get(0), value.get(1),value.get(2), value.get(3), value.get(4));
 				System.out.println();				
 			});
@@ -151,6 +152,13 @@ public class FullTrainings {
 			System.out.println("-----------------------------------------------------------------------------------------");
 			choiceTraining = getInfo(scan);
 			if(!caddy.containsKey(choiceTraining))displayWrongInput();
+			System.out.println("-----------------------------------------------------------------------------|");
+			System.out.println("Saisissez le nombre de formation à supprimer                                 |");
+			System.out.println("------------------------------------------------------------------------------");
+			quantityTraining = getInfo(scan);
+			removeTraining(choiceTraining,quantityTraining);
+			displayTrainings();
+			
 		}
 	}
 	//affichage en cas d'erreur de saisi
@@ -167,7 +175,8 @@ public class FullTrainings {
 		}
 	/**
 	 * Méthode d'ajout de formation dans le panier
-	 * @param input des id de formation commandées*/
+	 * @param input des id de formation commandées
+	 * @since 2.0*/
 	private static void addTraining(Integer idTraining, int Quantity) {
 		Integer choiceId;
 		int intQuantityTraining;
@@ -212,31 +221,29 @@ public class FullTrainings {
 
 	/**
 	 * Méthode de suppression de formation dans le panier
-	 * @param input des id de formation commandées*/
-	private static void removeTraining(Scanner scan) {
-		Integer choiceId;
-		int intQuantityTraining;
-		String stringQuantityTraining ="";
-		choiceId = getInfo(scan);
-
-		//test la présence de la formation dans le panier
-		if(!caddy.containsKey(choiceId)) 
-		{displayWrongInput();displayCaddy();
-		//test sur la quantité de la formation selectionnée
-		}else if(!caddy.get(choiceId).get(4).equals("1"))
+	 * @param input des id de formation commandées
+	 * @since v2.0*/
+	private static void removeTraining(Integer idTraining, int subQuantity) {
+		int intQuantityTraining;   	
+		String getStringQuantityTraining ;	//Quantité en String, de la formation dans le panier		
+		Integer intQuantityTrainingCaddy = Integer.parseInt(caddy.get(idTraining).get(4)); //Quantité en Integer, de la formation dans le panier	
+		
+		if(intQuantityTrainingCaddy < subQuantity) { displayWrongInput();displayCaddy();}
+		
+		if(intQuantityTrainingCaddy > subQuantity)
 		{
 			//décrémente de 1 une formation déjà présente dans le panier
-			stringQuantityTraining = caddy.get(choiceId).get(4);
-			caddy.get(choiceId).remove(4);
+			getStringQuantityTraining = caddy.get(idTraining).get(4);
+			caddy.get(idTraining).remove(4);
 
 			//conversion string to int pour incrémenté la quantité
-			intQuantityTraining = Integer.parseInt(stringQuantityTraining) - 1;
+			intQuantityTraining = intQuantityTrainingCaddy - subQuantity;
 
 			//conversion int to string et ajout au caddy
-			caddy.get(choiceId).add(String.valueOf(intQuantityTraining));
+			caddy.get(idTraining).add(String.valueOf(intQuantityTraining));
 			
 		} else {   //supprime la formation <k,v> du panier  si quantité = 0
-			caddy.remove(choiceId);
+			caddy.remove(idTraining);
 		}
 
 
