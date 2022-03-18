@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class FullTrainings {
 	/**
 	 * Programme simple(sans la poo) de vente de formation. Les structures de données retenues pour représenter les listes
-	 *  de formations et le caddy sont des HashMap. Liste des formation: clé=id et valeur=["Nom", "Durée", "Courte description", "Prix"] / 
+	 *  de formations et le caddy sont des Map. Liste des formation: clé=id et valeur=["Nom", "Durée", "Courte description", "Prix"] / 
 	 *  Exemple 1=["Java", "20", "Java SE 8 : Syntaxe & Poo", "3000"]. Panier: clé=id et valeur=["Nom", "Durée", "Courte description", "Prix", "Quantité"] / 
 	 *  Exemple 1=["Java", "20", "Java SE 8 : Syntaxe & Poo", "3000", "1"]. 
 	 * 
@@ -87,7 +87,8 @@ public class FullTrainings {
 
 	/** méthode qui affiche le menu d'achat de formation */
 	public static void displayBuyTrainings() {
-
+		int choiceTraining;
+		int quantityTraining;
 		System.out.println("                    Commandez les formations de votre choix                   ");
 		System.out.println("------------------------------------------------------------------------------");
 		System.out.println("ID |COURS          | NB/JOURS | DESCRIPTION                           | PRIX |");
@@ -99,14 +100,20 @@ public class FullTrainings {
 		System.out.println("-----------------------------------------------------------------------------|");
 		System.out.println("Saisissez l'id de la formation souhaitez et tapez entrer                     |");
 		System.out.println("------------------------------------------------------------------------------");
-
-		addTraining(scan);
+		choiceTraining = getInfo(scan);
+		if(!trainings.containsKey(choiceTraining))displayWrongInput();
+		
+		System.out.println("-----------------------------------------------------------------------------|");
+		System.out.println("Saisissez le nombre de formation désiré                                      |");
+		System.out.println("------------------------------------------------------------------------------");
+		quantityTraining = getInfo(scan);
+		addTraining(choiceTraining,quantityTraining);
 		displayTrainings();
 	}
 
 	/** méthode qui affiche un menu secondaire, le contenu du panier */
 	public static void displayCaddy() {
-		int choice;
+		int choice, choiceTraining, quantityTraining;
 
 		System.out.println("-----------------------------------------------------------------------------------------");
 		System.out.println("                                     MON PANIER                                         |");
@@ -142,8 +149,8 @@ public class FullTrainings {
 			System.out.println("-----------------------------------------------------------------------------------------");
 			System.out.println("---------------------Saisissez l'id de la formation à supprimer-------------------------|");
 			System.out.println("-----------------------------------------------------------------------------------------");
-			removeTraining(scan);
-			displayCaddy();
+			choiceTraining = getInfo(scan);
+			if(!caddy.containsKey(choiceTraining))displayWrongInput();
 		}
 	}
 	//affichage en cas d'erreur de saisi
@@ -152,51 +159,54 @@ public class FullTrainings {
 		System.out.println("                     S A S I E      I N C C O R E C T E                  |");
 		System.out.println("--------------------------------------------------------------------------");
 	}
-
-
+	/**Méthode qui vérifie l'existance d'une formation dans une hashmap */
+		private static boolean isContentTraining(Map<Integer, ArrayList<String>> m , Scanner scan) {
+			
+			return false;
+			
+		}
 	/**
 	 * Méthode d'ajout de formation dans le panier
 	 * @param input des id de formation commandées*/
-	private static void addTraining(Scanner scan) {
+	private static void addTraining(Integer idTraining, int Quantity) {
 		Integer choiceId;
 		int intQuantityTraining;
-		String stringQuantityTraining;
-		choiceId = getInfo(scan);
-		if(!trainings.containsKey(choiceId))  {
-			displayWrongInput();
-			displayBuyTrainings();}
-		//initialisation d'un panier vide avec la première formation commandée
+		String getStringQuantityTraining;
+		String addStringQuantityTraining = String.valueOf(Quantity);
+		
+		//initialisation d'un panier vide avec la première formation commandée et la quantité
 		if(caddy.isEmpty()) {			
-			caddy.put(choiceId, new ArrayList<String>());
-			caddy.get(choiceId).add(trainings.get(choiceId).get(0));caddy.get(choiceId).add(trainings.get(choiceId).get(1));
-			caddy.get(choiceId).add(trainings.get(choiceId).get(2));caddy.get(choiceId).add(trainings.get(choiceId).get(3));
-			caddy.get(choiceId).add("1");
+			caddy.put(idTraining, new ArrayList<String>());
+			caddy.get(idTraining).add(trainings.get(idTraining).get(0));caddy.get(idTraining).add(trainings.get(idTraining).get(1));
+			caddy.get(idTraining).add(trainings.get(idTraining).get(2));caddy.get(idTraining).add(trainings.get(idTraining).get(3));
+			caddy.get(idTraining).add(addStringQuantityTraining);
 		}else{
-			if(!caddy.containsKey(choiceId)) {	
+			if(!caddy.containsKey(idTraining)) {	
 
-				//ajoute une nouvelle formation au panier, quantité 1
-				caddy.put(choiceId, new ArrayList<String>());
-				caddy.get(choiceId).add(trainings.get(choiceId).get(0));caddy.get(choiceId).add(trainings.get(choiceId).get(1));
-				caddy.get(choiceId).add(trainings.get(choiceId).get(2));caddy.get(choiceId).add(trainings.get(choiceId).get(3));
-				caddy.get(choiceId).add("1");
+				//ajoute la formation choisie et la quantité
+				caddy.put(idTraining, new ArrayList<String>());
+				caddy.get(idTraining).add(trainings.get(idTraining).get(0));caddy.get(idTraining).add(trainings.get(idTraining).get(1));
+				caddy.get(idTraining).add(trainings.get(idTraining).get(2));caddy.get(idTraining).add(trainings.get(idTraining).get(3));
+				caddy.get(idTraining).add(addStringQuantityTraining);
 			}else {
 
-				//incrémente de 1 une formation déjà présente dans le panier
-				stringQuantityTraining = caddy.get(choiceId).get(4);
-				caddy.get(choiceId).remove(4);
+				//incrémente de Quantity une formation déjà présente dans le panier
+				getStringQuantityTraining = caddy.get(idTraining).get(4);
+				caddy.get(idTraining).remove(4);
 
 				//conversion string to int pour incrémenté la quantité
-				intQuantityTraining = 1 +Integer.parseInt(stringQuantityTraining); 
+				intQuantityTraining = Quantity +Integer.parseInt(getStringQuantityTraining); 
 				//conversion int to string et ajout au caddy
-				caddy.get(choiceId).add(String.valueOf(intQuantityTraining));		
+				caddy.get(idTraining).add(String.valueOf(intQuantityTraining));		
 			}
 		}
 
 	}
 	//gestion des erreur de saisies, string a la place d'un integer
 	private static int getInfo(Scanner scan) {
-		while(!scan.hasNextInt() )			
-			scan.next();
+		while(!scan.hasNextInt())			
+			{scan.next();
+		displayWrongInput();}
 		return scan.nextInt();		
 	}
 
