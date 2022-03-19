@@ -174,15 +174,17 @@ public class FullTrainings {
 		System.out.println("-----------------------------|");	
 		                  
 		System.out.println("| COURS          | Quantité  |");
+		System.out.println("|----------------------------|");
 		caddy.forEach((key, value) -> {
 			
-			System.out.format("|%-16s        | %-6s      |\n",value.get(0), value.get(4));
+			System.out.format("|%-16s|   %-8s|\n",value.get(0), value.get(4));
 		});
-		System.out.println("------------------------------");
-		System.out.format("|  TOTAL : %-6s            |\n",invoiceAmount());
+		System.out.println("------------------------------");	
+		System.out.format("|TOTAL : %-4s%-14s|\n",invoiceAmount(), "€");
 		System.out.println("------------------------------");
 		System.out.println("| 1 : Retour / 2 : Valider   |");
 		System.out.println("------------------------------");
+		
 		/*
 		 * while(choice > 2) { choice = getInfo(scan);} if(choice ==
 		 * 1)displayTrainings(); else pay;
@@ -190,11 +192,10 @@ public class FullTrainings {
 				
 	}
 	/**Méthode pour calculer le montant de la facture*/
-	private static double  invoiceAmount() {
-		double amount = 0;
-		for(ArrayList training :caddy.values())	
-			amount += (Double.parseDouble((String) training.get(3))*Double.parseDouble((String) training.get(4)));	
-			//System.out.println(training.get(4));
+	private static int  invoiceAmount() {
+		int amount = 0;
+		for(ArrayList<String> training :caddy.values())	
+			amount += (Integer.parseInt((String) training.get(3))*Integer.parseInt((String) training.get(4)));	
 		return amount;
 		
 	}
