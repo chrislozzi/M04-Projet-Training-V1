@@ -23,7 +23,7 @@ public class FullTrainings {
 	 * @since 1.0*/
 	protected static Map<Integer, ArrayList<String>> trainings = new HashMap<>();
 
-	/**Contenue du panier: id + data(+quantité)
+	/**Contenu du panier: id + data(+quantité)
 	   @since 1.1
 	 */
 	protected static Map<Integer, ArrayList<String>> caddy = new HashMap<>();
