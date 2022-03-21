@@ -28,8 +28,8 @@ public class FullTrainings {
 	 */
 	protected static Map<Integer, ArrayList<String>> caddy = new HashMap<>();
 
-	/**Contenue du panier: id + data(+quantité)
-	   @since 1.4
+	/**Liste des formations à venir : id + data
+	   @since 1.3
 	 */
 	protected static Map<Integer, ArrayList<String>> futurTrainings = new HashMap<>();
 	
@@ -38,12 +38,10 @@ public class FullTrainings {
 
 
 	/**
-	   méthode main contien l'initialisation de la liste des formations et leur
-	   affichage dans un tableau
-	   @since 1.0
-	   Initialisation de la liste des formations à venir
-	   @since1.4
-	   @param args pas d'arguments en ligne de commande
+	  *méthode main contient l'initialisation de la liste des formations et leur affichage dans un tableau.
+	  *v1.3->Initialisation de la liste des formations à venir
+	  *@since 1.0	   
+	  *@param args pas d'arguments en ligne de commande
 	 */
 	
 	public static void main(String[] args) {
@@ -55,14 +53,11 @@ public class FullTrainings {
 	}
 
 	/**
-	  * méthode qui affiche la liste des formations
+	  * Méthode qui affiche la liste des formations. 
+	  * v1.1 -> ajout d'items au menu : commande de formation et consultation du panier.
+	  * v1.2 -> ajout d'intems au menu : récapitulatif de la commande. 
+	  * v1.3 -> ajout d'items au menu : Formation à venir.
 	  *@since 1.0
-	  *Commande de formation et consultation du panier
-	  *@since 1.1
-	  *Récapitulatif de la commande
-	  *@since 1.3
-	  *Formation à venir
-	  *@since 1.4
 	  */
 	public static void displayTrainings() {
 		choice = 0;	
@@ -95,7 +90,7 @@ public class FullTrainings {
 			break;
 		case 3 : dsiplayInvoice();
 			break;
-		case 4 : displyFuturTrainnig();
+		case 4 : displayFuturTrainnig();
 			break;
 		case 5 :System.out.println("Au revoir et merci de votre visite");
 		System.exit(0);
@@ -103,7 +98,7 @@ public class FullTrainings {
 		}
 	}
 
-	/** méthode qui affiche le menu d'achat de formation 
+	/** méthode qui affiche le menu d'achat de formation.
 	   @since 1.1
 	 */
 	public static void displayOrderTrainings() {
@@ -134,6 +129,7 @@ public class FullTrainings {
 	}
 
 	/** méthode qui affiche le panier et son menu.
+	 * v1.2->ajout d'item dans le menu : Retirer des formations.
 	 * @since 1.1*/
 	public static void displayCaddy() {
 		choice = 0;
@@ -186,9 +182,8 @@ public class FullTrainings {
 	}	
 
 	/**Méthode qui affiche le menu récapitulatif de la commande avant le payement.
-	  *@since 1.4
-	  */
-	private static void dsiplayInvoice(){
+	  *@since 1.3 */
+	public static void dsiplayInvoice(){
 		choice =0;
 		int amountTrainings = 0;
 		if(caddy.isEmpty())displayCaddy();		
@@ -221,8 +216,8 @@ public class FullTrainings {
 		}	
 	}
 
-	/**Méthode pour calculer le montant de la facture
-	  *@since 1.4
+	/**Méthode pour calculer le montant de la facture.
+	  *@since 1.2
 	  */	
 	private static int  invoiceAmount() {
 		int amount = 0;
@@ -231,10 +226,10 @@ public class FullTrainings {
 		return amount;
 
 	}
-	/**Méthode qui affiche les formation à venir
-	  *@since 1.4
+	/**Méthode qui affiche les formation à venir.
+	  *@since 1.3
 	  */
-	public static void displyFuturTrainnig() {
+	public static void displayFuturTrainnig() {
 		System.out.println("|---------------------------------------------------------------------------");
 		System.out.println("|                  F O R M A T I O N S   A   V E N I R                     |");
 		System.out.println("|--------------------------------------------------------------------------|");
@@ -255,12 +250,12 @@ public class FullTrainings {
 	}
 
 	/**
-	  *Méthode d'ajout de formation dans le panier
-	  *@param idTraining identifiant de la formation à ajouter au panier
-	  *@param Quantity quantité de formation à ajouter au panier
+	  *Méthode d'ajout de formation dans le panier.
+	  *@param idTraining identifiant de la formation à ajouter au panier.
+	  *@param Quantity quantité de formation à ajouter au panier.
 	  *@since 1.1
 	  */
-	private static void addTraining(Integer idTraining, int Quantity) {
+	private static void addTraining(int idTraining, int Quantity) {
 		int intCaddyQuantity;
 		String getStringTrainingsQuantity ="";
 
@@ -290,12 +285,12 @@ public class FullTrainings {
 	}
 
 	/**
-	 *Méthode de suppression de formation dans le panier
-	 *@param idTraining identifiant de la formation à supprimer
-	 * @param subQuantity quantité de formation selectionnée a supprimer du panier
+	 *Méthode de suppression de formation dans le panier.
+	 *@param idTraining : identifiant de la formation à supprimer.
+	 * @param subQuantity : quantité de formation à supprimer du panier.
 	 * @since v1.2
 	 * */
-	private static void removeTraining(Integer idTraining, int quantityToSub) {
+	public static void removeTraining(int idTraining, int quantityToSub) {
 		int intCaddyQuantity;   		
 		Integer intCaddyQuantityCaddy = Integer.parseInt(caddy.get(idTraining).get(4)); //quantité de formation présente dans le panier, conversion en int.
 		if(intCaddyQuantityCaddy > quantityToSub){	
@@ -308,7 +303,7 @@ public class FullTrainings {
 
 	}
 
-	/** Méthode qui initialise la liste des formations 
+	/** Méthode qui initialise la liste des formations. 
 	   @since 1.0
 	 */
 	private static final void insertTrainings() {
@@ -318,7 +313,7 @@ public class FullTrainings {
 		trainings.put(4, new ArrayList<String>());trainings.get(4).add("Php frameworks");trainings.get(4).add("15");trainings.get(4).add("Symphony");trainings.get(4).add("2500");		
 		trainings.put(5, new ArrayList<String>());trainings.get(5).add("C#");trainings.get(5).add("20");trainings.get(5).add("DotNet Core");trainings.get(5).add("5000");
 	}
-	/** Méthode qui initialise la liste des formations à venir
+	/** Méthode qui initialise la liste des formations à venir.
 	   @since 1.4
 	 */
 	private static final void insertFuturTrainings() {
